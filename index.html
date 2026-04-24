@@ -1,105 +1,61 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Mon site</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<html lang="fr"></html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    </head>
+    <body> 
+       <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="tableau">
+                <script>
+                // GET REQUEST
+                document.addEventListener("DOMContentLoaded", function () {
 
-<body>
+                    var req;
+                    req = new XMLHttpRequest();
 
-    <h1>Mon site </h1>
-    <h2>GUSTAVE MATHYS</h2>
+                    req.open(
+                        "GET",
+                        "http://192.168.1.224/ciel2027/api/etudiants",
+                        true
+                    );
+                    
+                    req.send();
+                    
 
-    <P>
-        Bonjour,je m'appelle GUSTAVE Mathys.
-        Je suis etudiant en BTS CIEL.
-        Je suis passionne de moto,d'auto et de musique.
-    </p>
+                    req.onload = function () {
 
-    <img src="honda civic .jpg" width="300">
+                        var json = JSON.parse(req.responseText);
+                        var html = "";
 
-    <br><br>
+                        // loop and display data
+                        json.forEach(function (val) {
 
-    <video width="400" controls>
-        <source src="yam r 1.mp4" type="video/mp4">
-    </video>
+                            html += "<tr>";
+                            html += "<td>" + "<a href=./update_etudiant.html?id=" + val['id'] + ">" + val['nom'] + "</a>" + "</td>";
+                            html += "<td>" + val["prenom"] + "</td>";
+                            html += "<td>" + val["email"] + "</td>";
+                            html += "</tr>";
 
-    <h3>Date et heure : </h3>
-    <div id="horloge"></div>
+                        });
 
-    <h3>Météo :</h3>
-    <p id="demo"></p>
+                        // append in tbody
+                        document.getElementById("tableau").innerHTML = html;
+                    };
 
-     </div>
-  <div class="game-container"> 
-<h1>Jeu de la dichotomie</h1>
-
-    <p>Faites glisser le slider pour choisir une valeur :</p>
-
-    <input type="range" id="slider" min="1" max="100" value="50">
-    <p>Valeur choisie : <span id="value">50</span></p>
-<p id="message"></p>
-</div> 
-
-
-
-   
-
-    <h3>Bitcoin & Conversion</h3>
-    <p id="btc">Chargement Bitcoin...</p>
-
-<script>
-var xhrBtc = new XMLHttpRequest();
-
-xhrBtc.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-
-        var json = JSON.parse(xhrBtc.responseText);
-
-        var prixEUR = json.EUR.last;
-        var prixUSD = json.USD.last;
-
-        document.getElementById("btc").innerHTML =
-            "Un Bitcoin vaut <strong>"
-            + prixEUR.toFixed(2) + " €</strong> et <strong>"
-            + prixUSD.toFixed(2) + " $</strong><br><br>"
-            + "1 € vaut "
-            + (prixUSD / prixEUR).toFixed(3)
-            + " $";
-    }
-};
-
-xhrBtc.open("GET", "https://blockchain.info/ticker", true);
-xhrBtc.send();
-</script>
-<!-- SCRIPT BITCOIN -->
-<script>
-var xhrBtc = new XMLHttpRequest();
-
-xhrBtc.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-
-        var json = JSON.parse(xhrBtc.responseText);
-
-        var prixEUR = json.EUR.last;
-        var prixUSD = json.USD.last;
-
-        document.getElementById("btc").innerHTML =
-            "Un Bitcoin vaut <strong>"
-            + prixEUR.toFixed(2) + " €</strong> et <strong>"
-            + prixUSD.toFixed(2) + " $</strong><br><br>"
-            + "1 € vaut "
-            + (prixUSD / prixEUR).toFixed(3)
-            + " $";
-    }
-};
-
-xhrBtc.open("GET", "https://blockchain.info/ticker", true);
-xhrBtc.send();
-</script>
-<script src="script.js"></script>
-</body>
+                });
+                </script>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-success" onclick="window.location.href = 'create_etudiant.html';">
+            Inscrire un étudiant
+        </button>
+    </body>
 </html>
-
-
